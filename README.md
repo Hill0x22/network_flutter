@@ -1,13 +1,12 @@
 # network_flutter
 
-HTTP Network Requests module for Sugar Foundations apps projects
+HTTP Network Request module for Sugar Foundation projects
 
 ## Introduction
 
 Based on Dio package [Dio](https://pub.dev/packages/dio)
 
 ## Getting Started
-
 
 Add the dependency in your project's 'pubspec.yaml' file.
 
