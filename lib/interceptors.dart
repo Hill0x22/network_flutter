@@ -19,10 +19,12 @@ class RequestErrorInterceptors extends InterceptorsWrapper {
     if (error.response.statusCode == 404) {
       return RequestNotFoundError();
     }
-    return RequestResponseError(
-      error.response.data['message']?.toString() ?? error.message ?? 'unknown',
-      error.response.statusCode ?? 500,
-    );
+    
+    return error;
+//     return RequestResponseError(
+//       error.response.data['message']?.toString() ?? error.message ?? 'unknown',
+//       error.response.statusCode ?? 500,
+//     );
   }
 }
 
