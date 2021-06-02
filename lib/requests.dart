@@ -348,12 +348,12 @@ class _Request {
     CancelToken cancelToken,
     T Function(Response<dynamic>) onResponse,
   }) async {
+    _externalDio.options.baseUrl = baseUrl;
+    if(headers != null){
+      _externalDio.options.headers = headers;
+    }
     final request = _externalDio.get(
       path,
-      options: RequestOptions(
-        headers: headers,
-        baseUrl: baseUrl,
-      ),
       queryParameters: params,
       cancelToken: cancelToken,
     );
@@ -370,12 +370,12 @@ class _Request {
     CancelToken cancelToken,
     dynamic Function(Response<dynamic>) onResponse,
   }) async {
+    _externalDio.options.baseUrl = baseUrl;
+    if(headers != null){
+      _externalDio.options.headers = headers;
+    }
     final request = _externalDio.get(
       path,
-      options: RequestOptions(
-        headers: headers,
-        baseUrl: baseUrl,
-      ),
       queryParameters: params,
       cancelToken: cancelToken,
     );
@@ -404,13 +404,13 @@ class _Request {
     Function(int, int) onSendProgress,
     dynamic Function(Response<dynamic>) onResponse,
   }) async {
+    _externalDio.options.baseUrl = baseUrl;
+    if(headers != null){
+      _externalDio.options.headers = headers;
+    }
     final request = _externalDio.put(
       path,
       data: data,
-      options: RequestOptions(
-        headers: headers,
-        baseUrl: baseUrl,
-      ),
       queryParameters: params,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
@@ -429,14 +429,14 @@ class _Request {
     CancelToken cancelToken,
     dynamic Function(Response<dynamic>) onResponse,
   }) async {
+    _externalDio.options.baseUrl = baseUrl;
+    if(headers != null){
+      _externalDio.options.headers = headers;
+    }
     final request = _externalDio.post(
       path,
       data: data,
       queryParameters: params,
-      options: RequestOptions(
-        headers: headers,
-        baseUrl: baseUrl,
-      ),
       cancelToken: cancelToken,
     );
     final response = await request.timeout(_timeoutDuration);

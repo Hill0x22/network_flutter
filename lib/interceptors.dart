@@ -2,7 +2,7 @@ part of network_flutter;
 
 class RequestErrorInterceptors extends InterceptorsWrapper {
   @override
-  Future<dynamic> onError(DioError error) async {
+  Future<dynamic> onError(DioError error, _) async {
     if (error.error is SocketException || error.error is HandshakeException) {
       return RequestNetworkError();
     }
@@ -30,7 +30,7 @@ class RequestErrorInterceptors extends InterceptorsWrapper {
 
 class RequestParseInterceptors extends InterceptorsWrapper {
   @override
-  Future onRequest(RequestOptions options) async {
+  Future onRequest(RequestOptions options, _) async {
     final authorization = options.extra['authorization']?.toString() ?? '';
 
     if (authorization.isNotEmpty) {
@@ -45,7 +45,7 @@ class RequestParseInterceptors extends InterceptorsWrapper {
   }
 
   @override
-  Future<dynamic> onResponse(Response<dynamic> response) async {
+  Future<dynamic> onResponse(Response<dynamic> response, _) async {
     if (response.statusCode == 200) {
       return response.data['result'];
     }
