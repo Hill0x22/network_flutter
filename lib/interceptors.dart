@@ -19,7 +19,7 @@ class RequestErrorInterceptors extends InterceptorsWrapper {
     if (error.response.statusCode == 404) {
       return RequestNotFoundError();
     }
-    
+
     return error;
 //     return RequestResponseError(
 //       error.response.data['message']?.toString() ?? error.message ?? 'unknown',
@@ -30,7 +30,10 @@ class RequestErrorInterceptors extends InterceptorsWrapper {
 
 class RequestParseInterceptors extends InterceptorsWrapper {
   @override
-  Future onRequest(RequestOptions options, _) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     final authorization = options.extra['authorization']?.toString() ?? '';
 
     if (authorization.isNotEmpty) {
@@ -41,16 +44,19 @@ class RequestParseInterceptors extends InterceptorsWrapper {
       );
     }
 
-    return options;
+    handler.next(options);
   }
 
   @override
-  Future<dynamic> onResponse(Response<dynamic> response, _) async {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) async {
     if (response.statusCode == 200) {
-      return response.data['result'];
+      response.data = response.data['result'];
+      handler.next(response);
+      return;
     }
     throw Exception(response.data['message']);
   }
 }
-
-

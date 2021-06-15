@@ -117,7 +117,7 @@ class _Request {
   }) {
     final processOptions = options ?? Options();
     processOptions.extra = {
-      ...processOptions.extra,
+      if (processOptions?.extra != null) ...processOptions.extra,
       'authorization': authorization,
     };
     processOptions.method = method ?? processOptions.method;
@@ -349,7 +349,7 @@ class _Request {
     T Function(Response<dynamic>) onResponse,
   }) async {
     _externalDio.options.baseUrl = baseUrl;
-    if(headers != null){
+    if (headers != null) {
       _externalDio.options.headers = headers;
     }
     final request = _externalDio.get(
@@ -371,7 +371,7 @@ class _Request {
     dynamic Function(Response<dynamic>) onResponse,
   }) async {
     _externalDio.options.baseUrl = baseUrl;
-    if(headers != null){
+    if (headers != null) {
       _externalDio.options.headers = headers;
     }
     final request = _externalDio.get(
@@ -405,7 +405,7 @@ class _Request {
     dynamic Function(Response<dynamic>) onResponse,
   }) async {
     _externalDio.options.baseUrl = baseUrl;
-    if(headers != null){
+    if (headers != null) {
       _externalDio.options.headers = headers;
     }
     final request = _externalDio.put(
@@ -430,7 +430,7 @@ class _Request {
     dynamic Function(Response<dynamic>) onResponse,
   }) async {
     _externalDio.options.baseUrl = baseUrl;
-    if(headers != null){
+    if (headers != null) {
       _externalDio.options.headers = headers;
     }
     final request = _externalDio.post(
