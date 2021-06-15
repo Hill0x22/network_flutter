@@ -2,29 +2,31 @@ part of network_flutter;
 
 class RequestErrorInterceptors extends InterceptorsWrapper {
   @override
-  Future<dynamic> onError(DioError error, _) async {
+  void onError(
+    DioError error,
+    ErrorInterceptorHandler handler,
+  ) async {
+    var mError = error;
     if (error.error is SocketException || error.error is HandshakeException) {
-      return RequestNetworkError();
-    }
-    if (error.response == null || error.response.data == null) {
-      return RequestEmptyError();
-    }
-    if (error.response.statusCode == 503) {
-      return RequestEmptyError();
-    }
-    if (error.response.statusCode == 502) {
-      return RequestEmptyError();
-    }
-    // When is 404 response.data is empty
-    if (error.response.statusCode == 404) {
-      return RequestNotFoundError();
+      mError = RequestNetworkError();
+    } else if (error.response == null || error.response.data == null) {
+      mError = RequestEmptyError();
+    } else if (error.response.statusCode == 503) {
+      mError = RequestEmptyError();
+    } else if (error.response.statusCode == 502) {
+      mError = RequestEmptyError();
+    } else if (error.response.statusCode == 404) {
+      // When is 404 response.data is empty
+      mError = RequestNotFoundError();
     }
 
-    return error;
-//     return RequestResponseError(
-//       error.response.data['message']?.toString() ?? error.message ?? 'unknown',
-//       error.response.statusCode ?? 500,
-//     );
+    if (mError.response != null &&
+        mError.response.data != null &&
+        mError.response.data['message'] != null) {
+      mError.error = mError.response.data['message']?.toString();
+    }
+
+    handler.next(mError);
   }
 }
 
@@ -38,9 +40,9 @@ class RequestParseInterceptors extends InterceptorsWrapper {
 
     if (authorization.isNotEmpty) {
       options.headers.update(
-        'authorization',
-        (_) => 'Basic $authorization',
-        ifAbsent: () => 'Basic $authorization',
+        'Authorization',
+        (_) => '$authorization',
+        ifAbsent: () => '$authorization',
       );
     }
 
@@ -53,10 +55,11 @@ class RequestParseInterceptors extends InterceptorsWrapper {
     ResponseInterceptorHandler handler,
   ) async {
     if (response.statusCode == 200) {
-      response.data = response.data['result'];
+      response.data = response.data['result'] ?? '';
       handler.next(response);
       return;
     }
-    throw Exception(response.data['message']);
+    handler.next(response);
+    // throw Exception(response.data['message']);
   }
 }

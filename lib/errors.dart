@@ -1,12 +1,12 @@
 part of network_flutter;
 
-class RequestEmptyError extends Error {}
+class RequestEmptyError extends DioError {}
 
-class RequestNotFoundError extends Error {}
+class RequestNotFoundError extends DioError {}
 
-class RequestNetworkError extends Error {}
+class RequestNetworkError extends DioError {}
 
-class RequestResponseError extends Error {
+class RequestResponseError extends DioError {
   RequestResponseError(this.message, this.statusCode);
   final String message;
   final int statusCode;
