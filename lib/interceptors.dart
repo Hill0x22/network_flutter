@@ -1,6 +1,9 @@
 part of network_flutter;
 
 class RequestErrorInterceptors extends InterceptorsWrapper {
+  final Function noAuth;
+  RequestErrorInterceptors(this.noAuth);
+
   @override
   void onError(
     DioError error,
@@ -18,6 +21,9 @@ class RequestErrorInterceptors extends InterceptorsWrapper {
     } else if (error.response.statusCode == 404) {
       // When is 404 response.data is empty
       mError = RequestNotFoundError();
+    } else if (error.response.statusCode == 401) {
+      mError = DioError(error: null);
+      noAuth();
     }
 
     if (mError.response != null &&

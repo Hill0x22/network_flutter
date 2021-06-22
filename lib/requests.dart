@@ -13,6 +13,12 @@ class _Request {
   _Request() {
 // Internal Api request
 
+    onNoAuth = () {
+      if (_noAuthCallBack != null) {
+        _noAuthCallBack();
+      }
+    };
+
     _internalDio = Dio(BaseOptions(
       connectTimeout: _timeoutSeconds,
       receiveTimeout: _timeoutSeconds,
@@ -23,7 +29,7 @@ class _Request {
       requestBody: true,
       responseBody: true,
     ));
-    _internalDio.interceptors.add(RequestErrorInterceptors());
+    _internalDio.interceptors.add(RequestErrorInterceptors(onNoAuth));
     _internalDio.interceptors.add(RequestParseInterceptors());
     (_internalDio.httpClientAdapter as DefaultHttpClientAdapter)
         .onHttpClientCreate = (client) {
@@ -42,7 +48,7 @@ class _Request {
       requestBody: true,
       responseBody: true,
     ));
-    _externalDio.interceptors.add(RequestErrorInterceptors());
+    _externalDio.interceptors.add(RequestErrorInterceptors(onNoAuth));
     (_externalDio.httpClientAdapter as DefaultHttpClientAdapter)
         .onHttpClientCreate = (client) {
       client.badCertificateCallback = (cert, host, port) => true;
@@ -56,6 +62,14 @@ class _Request {
   Dio _internalDio;
   @protected
   Dio _externalDio;
+  @protected
+  Function onNoAuth;
+
+  Function _noAuthCallBack;
+
+  void setNoAuthCallBack(Function noAuthCallBack) {
+    _noAuthCallBack = noAuthCallBack;
+  }
 
   void setup(String baseUrl, {Map<String, String> headers}) {
     _internalDio.options.baseUrl = baseUrl;
