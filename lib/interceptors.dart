@@ -61,7 +61,7 @@ class RequestParseInterceptors extends InterceptorsWrapper {
     ResponseInterceptorHandler handler,
   ) async {
     if (response.statusCode == 200) {
-      response.data = response.data['result'] ?? '';
+      response.data = response.data['result'] ?? response.data['data']  ?? '';
       handler.next(response);
       return;
     }
